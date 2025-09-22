@@ -1,0 +1,50 @@
+.header {
+    background: #4f46e5;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+    height: 70px;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.logo {
+    padding-left: 20px;
+}
+
+.nav ul {
+    display: flex;
+    gap: 50px;
+}
+
+.nav ul li {
+    list-style: none;
+}
+
+.nav ul li a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.nav ul li a:hover {
+    color: #ffffff;
+}
+
+img {
+    width: 40px;
+}
+
+.user {
+    margin-right: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.user a {
+    text-decoration: none;
+    color: #000000;
+}
