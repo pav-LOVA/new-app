@@ -1,22 +1,37 @@
-import './Header.css'
+import styles from './Header.module.css'
 import LogoAston from '../../assets/images/LogoAston.svg'
 import UserIcon from '../../assets/images/UserIcon.png'
+import ModalButton from '../../shared/ui/Button/ModalButton'
+import Modal from '../../shared/ui/Modal/Modal'
+import { useState } from 'react'
+import { useTheme } from '../../shared/lib/theme/ThemeProvider'
 
 function Header() {
+    const { theme } = useTheme();
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="header">
-            <img src={LogoAston} className='logo' />
-            <div className="nav">
+        <div className={`${styles.header} ${theme === "light" ? styles.light : styles.dark}`}>
+            <img src={LogoAston} className={styles.logo} />
+            <div className={styles.nav}>
                 <ul>
                     <li><a href="#"> Вперед </a></li>
                     <li><a href="#"> На главную </a></li>
                     <li><a href="#"> Назад </a></li>
                 </ul>
             </div>
-            <div className="user">
-                <img src={UserIcon} className='logo' />
-                <a href="#"> ЕП </a>
+            <div className={styles.project}>
+                <ModalButton onClick={() => setIsOpen(true)} />
+                <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                    <h2>О проекте</h2>
+                    <p>
+                        Мой первое приложение на React, реализующее просмотр постов
+                    </p>
+                </Modal>
+                <div className={styles.user}>
+                    <img src={UserIcon} className={styles.logo} />
+                    <a href="#"> ЕП </a>
+                </div>
             </div>
         </div>
     )

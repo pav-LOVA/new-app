@@ -1,18 +1,21 @@
+import React from 'react';
 import PostCard from '../../entities/post/ui/PostCard/PostCard';
 import type { PostListInterface } from '../../interfaces/post-list.interface';
-import './PostList.css'
+import styles from './PostList.module.css'
 
 function PostList({ posts }: PostListInterface) {
   return (
-   <div  className='post-list'>
-      {posts.map(post => (
-        <PostCard 
-          id={post.id}
-          title={post.title}
-          thesis={post.thesis}
-          info={post.info}
-          date={post.date}
-        />
+    <div className={styles.postList}>
+      {posts.map((post) => (
+        <React.Fragment key={post.id}>
+          <PostCard
+            id={post.id}
+            title={post.title}
+            thesis={post.thesis}
+            info={post.info}
+            date={post.date}
+          />
+        </React.Fragment>
       ))}
     </div>
   );

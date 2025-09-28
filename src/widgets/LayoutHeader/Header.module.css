@@ -1,6 +1,4 @@
 .header {
-    background: #4f46e5;
-    color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -10,6 +8,14 @@
     position: fixed;
     top: 0;
     left: 0;
+}
+
+.light.header {
+    background: #7c76eb;
+}
+
+.dark.header {
+    background: #4f46e5;
 }
 
 .logo {
@@ -25,13 +31,14 @@
     list-style: none;
 }
 
-.nav ul li a {
+.light .nav ul li a {
     text-decoration: none;
     color: #ffffff;
 }
 
-.nav ul li a:hover {
-    color: #ffffff;
+.dark .nav ul li a {
+    text-decoration: none;
+    color: #000000;
 }
 
 img {
@@ -47,4 +54,9 @@ img {
 .user a {
     text-decoration: none;
     color: #000000;
+}
+
+.project {
+    display: flex;
+    flex-direction: row;
 }
