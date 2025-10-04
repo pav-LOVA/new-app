@@ -1,4 +1,4 @@
-export interface ThemeContextInterface {
+export interface ThemeContextI {
   theme: "light" | "dark";
   toggleTheme: () => void;
 }

@@ -71,3 +71,35 @@
 .postCard .nav button img {
     width: 90%;
 }
+
+.commentsSection {
+  margin-top: 10px;
+}
+
+.toggleComments {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px 0;
+  font-size: 14px;
+}
+
+.light .toggleComments {
+    color: #007bff;
+}
+
+.dark .toggleComments {
+    color: #000000;
+}
+
+.commentList {
+  list-style: none;
+  padding-left: 15px;
+  margin-top: 5px;
+}
+
+.comment {
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}

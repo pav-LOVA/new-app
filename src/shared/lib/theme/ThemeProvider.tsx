@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, type ReactNode, useEffect } from "react";
-import type { ThemeContextInterface } from "../../../interfaces/theme-context.interface";
+import type { ThemeContextI } from "../../../interfaces/theme-context.interface";
 
 
-const ThemeContext = createContext<ThemeContextInterface | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextI | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<"light" | "dark">("light");

@@ -1,12 +1,16 @@
 import React, { useEffect} from "react";
 import ReactDOM from "react-dom";
 import styles from "./Modal.module.css";
-import { type ModalInterface } from '../../../interfaces/modal.inteface';
+import { type ModalI } from '../../../interfaces/modal.inteface';
 
 
 const modalRoot = document.getElementById("modal-root") as HTMLElement;
 
-const Modal: React.FC<ModalInterface> = ({ isOpen, onClose, children }) => {
+const Modal: React.FC<ModalI> & {
+  Header: React.FC<{ children: React.ReactNode }>;
+  Body: React.FC<{ children: React.ReactNode }>;
+  Footer: React.FC<{ children: React.ReactNode }>;
+} = ({ isOpen, onClose, children }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -27,5 +31,9 @@ const Modal: React.FC<ModalInterface> = ({ isOpen, onClose, children }) => {
     modalRoot
   );
 };
+
+Modal.Header = ({ children }) => <div className={styles.header}>{children}</div>;
+Modal.Body = ({ children }) => <div className={styles.body}>{children}</div>;
+Modal.Footer = ({ children }) => <div className={styles.footer}>{children}</div>;
 
 export default Modal;

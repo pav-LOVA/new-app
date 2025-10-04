@@ -1,3 +1,3 @@
-export interface ModalButtonInterface {
+export interface ModalButtonI {
   onClick: () => void;
 }

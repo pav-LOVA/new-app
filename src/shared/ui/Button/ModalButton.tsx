@@ -1,8 +1,8 @@
 
-import { type ModalButtonInterface} from '../../../interfaces/modal-button.interface'
+import { type ModalButtonI} from '../../../interfaces/modal-button.interface'
 
 
-function ModalButton({ onClick }: ModalButtonInterface) {
+function ModalButton({ onClick }: ModalButtonI) {
   return (
     <div>
       <button className='button' onClick={onClick}>
