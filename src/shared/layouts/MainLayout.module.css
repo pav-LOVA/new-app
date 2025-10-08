@@ -13,18 +13,3 @@
 .dark.layout {
     background: #313131;
 }
-
-.layout ul {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.layout ul li {
-    list-style: none;
-}
-
-.layout ul li a {
-    text-decoration: none;
-    color: #93f224;
-}

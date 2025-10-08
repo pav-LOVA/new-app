@@ -1,4 +1,7 @@
-export interface CommentI {
+export interface CommentsI {
   id: number;
-  text: string;
+  postId: number;
+  name: string;
+  email: string;
+  body: string;
 }

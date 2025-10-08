@@ -21,6 +21,7 @@
 .postCard h2 {
     margin: 0;
     font-size: 20px;
+    cursor: pointer;
 }
 
 .postCard .thesis {

@@ -5,30 +5,35 @@ import dislikeLight from './../../../../assets/images/DislikeFinger.png';
 import likeDark from './../../../../assets/images/LikeFinger(w).png';
 import dislikeDark from './../../../../assets/images/DislikeFinger(w).png';
 import { useTheme } from '../../../../shared/lib/theme/ThemeProvider';
-import type { CommentI } from '../../../../interfaces/comment.interface';
+import type { CommentsI } from '../../../../interfaces/comment.interface';
 import { useCallback, useState } from 'react';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
-function PostCardComponent(props: PostsI & { comments?: CommentI[] }) {
+function PostCardComponent(props: PostsI & { comments?: CommentsI[] }) {
   const { theme } = useTheme();
   const [commentsOpen, setCommentsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleComments = useCallback(() => {
     setCommentsOpen((prev) => !prev);
   }, []);
 
+  const openPost = useCallback(() => {
+    navigate(`/posts/${props.id}`);
+  }, [navigate, props.id]);
+
   return (
     <div className={`${styles.postCard} ${theme === "light" ? styles.light : styles.dark}`}>
-      <h2>{props.title}</h2>
-      <p className={styles.thesis}><b>{props.thesis}</b></p>
-      <p className={styles.info}>{props.info}</p>
+      <h2 onClick={openPost}>{props.title}</h2>
+      <p className={styles.info}>{props.body}</p>
       <div className={styles.nav}>
         <div>
           <button><img src={`${theme === "light" ? likeLight : likeDark}`} /></button>
           <button><img src={`${theme === "light" ? dislikeLight : dislikeDark}`} /></button>
         </div>
-        <div className={styles.date}>{props.date}</div>
+        <p className={styles.info}>{props.userName}</p>
       </div>
 
       {props.comments && props.comments.length > 0 && (
@@ -41,7 +46,7 @@ function PostCardComponent(props: PostsI & { comments?: CommentI[] }) {
             <ul className={styles.commentList}>
               {props.comments.map((comment) => (
                 <li key={comment.id} className={styles.comment}>
-                  {comment.text}
+                  <b>{comment.email}:</b> {comment.body}
                 </li>
               ))}
             </ul>

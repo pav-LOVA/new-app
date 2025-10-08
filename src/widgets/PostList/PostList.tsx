@@ -5,16 +5,16 @@ import styles from './PostList.module.css'
 
 function PostList({ posts }: PostListI) {
 
-const renderedPosts = useMemo(() => {
-  
+  const renderedPosts = useMemo(() => {
+
     return posts.map((post) => (
       <React.Fragment key={post.id}>
         <PostCard
           id={post.id}
           title={post.title}
-          thesis={post.thesis}
-          info={post.info}
-          date={post.date}
+          body={post.body}
+          userId={post.userId}
+          userName={post.userName}
           comments={post.comments}
         />
       </React.Fragment>
