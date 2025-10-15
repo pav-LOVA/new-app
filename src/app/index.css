@@ -28,6 +28,19 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  padding: 90px 20px 60px 300px;
+}
+
+body.light {
+  background-color: #fff;
+}
+
+body.dark {
+  background-color: #000000;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1 {
