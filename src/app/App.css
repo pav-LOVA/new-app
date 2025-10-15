@@ -3,8 +3,17 @@
   grid-area: content;
   padding: 50px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
 
+body.light {
+  background-color: #fff;
+}
 
+body.dark {
+  background-color: #000000;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

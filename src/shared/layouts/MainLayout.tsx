@@ -1,18 +1,17 @@
-import './MainLayout.css'
+import ThemeSwitcher from '../../features/ThemeSwitcher/ui/ThemeSwitcher';
+import { useTheme } from '../lib/theme/ThemeProvider';
+import styles from './MainLayout.module.css'
+import UserTabs from '../../widgets/UserTabs/UserTabs';
 
 function MainLayout() {
-  
+  const { theme } = useTheme();
+
   return (
-    <aside className="layout">
+    <aside className={`${styles.layout} ${theme === "light" ? styles.light : styles.dark}`}>
       <nav>
-        <ul>
-          <li><a href="#"> Главная </a></li>
-          <li><a href="#"> Новости </a></li>
-          <li><a href="#"> Моя страница </a></li>
-          <li><a href="#"> Рекомендации </a></li>
-          <li><a href="#"> Избранное </a></li>
-        </ul>
+        <UserTabs />
       </nav>
+      <ThemeSwitcher />
     </aside>
   )
 }

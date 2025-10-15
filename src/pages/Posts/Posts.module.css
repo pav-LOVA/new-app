@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 80vh;
+  padding: 20px;
+}
+
+.card {
+  max-width: 800px;
+  width: 100%;
+  padding: 30px;
+  border-radius: 16px;
+  background: var(--card-bg, #f7f7f7);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.light .card  {
+  background: #f8f8f8;
+}
+
+.dark .card  {
+  background: #2d2d2d;
+  color: #f1f1f1;
+}
+
+.userPostsContainer {
+  padding: 20px;
+}
+
+.message {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 18px;
+  color: gray;
+}

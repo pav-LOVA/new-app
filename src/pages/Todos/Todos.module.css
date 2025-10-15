@@ -1,0 +1,65 @@
+.todosContainer {
+  padding: 20px;
+  width: 100%;
+}
+
+.todosList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 auto;
+  list-style: none;
+  padding: 0;
+}
+
+.todoCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f3f3f3;
+  border-radius: 10px;
+  padding: 15px;
+  transition: 0.3s;
+  opacity: 0.9;
+}
+
+.todoCard:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.completed {
+  opacity: 0.5;
+}
+
+.status {
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.done {
+  color: #0a6110;
+  background: #93f224;
+}
+
+.pending {
+  color: #da7912;
+  background: #ffe8c9;
+}
+
+.message {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 18px;
+  color: gray;
+}
+
+.light .todoCard {
+  background: #f8f8f8;
+}
+
+.dark .todoCard {
+  background: #2d2d2d;
+  color: #f1f1f1;
+}

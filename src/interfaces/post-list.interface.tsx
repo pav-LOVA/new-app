@@ -1,5 +1,5 @@
-import type { PostsInterface } from "./posts.interface";
+import type { PostsI } from "./posts.interface";
 
-export interface PostListInterface {
-  posts: PostsInterface[];
+export interface PostListI {
+  posts: PostsI[];
 }

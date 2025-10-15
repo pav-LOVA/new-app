@@ -1,0 +1,20 @@
+.tabs ul {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.tabs ul li {
+    list-style: none;
+}
+
+.tabs ul li a {
+    text-decoration: none;
+    color: #93f224;
+}
+
+.tabs ul li a.active {
+    color: rgb(255, 255, 255);
+    font-size: 1.5em;
+    text-decoration: underline;
+}

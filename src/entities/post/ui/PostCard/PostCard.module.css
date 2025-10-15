@@ -1,0 +1,106 @@
+.postCard {
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 500px;
+    flex: 1 1 calc(50% - 16px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.light.postCard {
+    color: black;
+}
+
+.dark.postCard {
+    color: white;
+    background-color: #4f46e5;
+}
+
+.postCard h2 {
+    margin: 0;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.postCard .thesis {
+    margin: 0;
+    font-size: 15px;
+}
+
+.light.postCard .thesis {
+    color: #585858;
+}
+
+.dark.postCard .thesis {
+    color: #ffffff;
+}
+
+.postCard .info {
+    font-size: 20px;
+}
+
+.postCard .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.postCard .nav .date {
+    font-size: 10px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.light.postCard .nav .date {
+    color: #585858;
+}
+
+.dark.postCard .nav .date {
+    color: #ffffff;
+}
+
+.postCard .nav button {
+    background-color: transparent;
+    margin-right: 20px;
+    width: 70px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+} 
+
+.postCard .nav button img {
+    width: 90%;
+}
+
+.commentsSection {
+  margin-top: 10px;
+}
+
+.toggleComments {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px 0;
+  font-size: 14px;
+}
+
+.light .toggleComments {
+    color: #007bff;
+}
+
+.dark .toggleComments {
+    color: #000000;
+}
+
+.commentList {
+  list-style: none;
+  padding-left: 15px;
+  margin-top: 5px;
+}
+
+.comment {
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}

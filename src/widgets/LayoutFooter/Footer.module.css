@@ -1,0 +1,27 @@
+.footer {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 40px;
+  z-index: 1000;
+}
+
+.light.footer {
+  background: #7c76eb;
+}
+
+.dark.footer {
+  background: #4f46e5;
+}
+
+.light .nav {
+  color: white;
+}
+
+.dark .nav {
+  color: #000;
+}
