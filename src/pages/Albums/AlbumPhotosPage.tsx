@@ -6,6 +6,8 @@ import MainLayout from "../../shared/layouts/MainLayout";
 import { useTheme } from "../../shared/lib/theme/ThemeProvider";
 import loaderStyles from "../../shared/lib/hoc/withLoading.module.css";
 import { useGetAlbumPhotosQuery } from "../../entities/album/api/albumsApi";
+import type { PhotoT } from "../../entities/photo/model/types";
+import type { ItemList } from "../../shared/ui/ItemList/ItemList";
 
 function AlbumPhotos() {
   const { theme } = useTheme();
@@ -15,6 +17,20 @@ function AlbumPhotos() {
 
   const { data: photos = [], isLoading, isFetching, error } = useGetAlbumPhotosQuery(albumId, { skip: !albumId });
 
+
+   const photosList: ItemList<PhotoT> = {
+    items: photos,
+    renderItem: (photo) => (
+      <div key={photo.id} className={styles.card}>
+        <img src={photo.thumbnailUrl} alt={photo.title} />
+      </div>
+    ),
+    isLoading: isLoading || isFetching ,
+    error: error ? "Ошибка загрузки фотографий" : null,
+    emptyMessage: "Нет фотографий для этого альбома.",
+  };
+
+
   return (
     <div className="content">
       <Header />
@@ -22,22 +38,18 @@ function AlbumPhotos() {
 
       <div
         className={`${styles.photosContainer} ${theme === "light" ? styles.light : styles.dark}`}>
-        {isLoading || isFetching ? (
+        {photosList.isLoading ? (
           <div className={loaderStyles.container}>
             <span className={loaderStyles.loader}></span>
           </div>
-        ) : error ? (
-          <p className={styles.error}>Ошибка загрузки фотографий</p>
-        ) : photos.length > 0 ? (
+        ) : photosList.error ? (
+          <p className={styles.error}>{photosList.error}</p>
+        ) : photosList.items.length > 0 ? (
           <div className={styles.grid}>
-            {photos.map((photo) => (
-              <div key={photo.id} className={styles.card}>
-                <img src={photo.thumbnailUrl} alt={photo.title} />
-              </div>
-            ))}
+            {photosList.items.map(photosList.renderItem)}
           </div>
         ) : (
-          <p className={styles.message}>Нет фотографий для этого альбома.</p>
+          <p className={styles.message}>{photosList.emptyMessage}.</p>
         )}
       </div>
 

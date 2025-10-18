@@ -1,9 +1,9 @@
 import { createSlice, createEntityAdapter} from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { PostsI } from "../../../../interfaces/posts.interface";
+import type { PostsT } from "../../model/types";
 import type { RootState } from "../../../../app/providers/store/store";
 
-const postsAdapter = createEntityAdapter<PostsI, number>({
+const postsAdapter = createEntityAdapter<PostsT, number>({
   selectId: (post) => post.id,
   sortComparer: (a, b) => b.id - a.id,
 });

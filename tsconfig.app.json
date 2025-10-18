@@ -16,7 +16,10 @@
     "jsx": "react-jsx",
 
     /* Linting */
+
+    //Строгий режим
     "strict": true,
+    
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,

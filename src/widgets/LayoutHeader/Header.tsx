@@ -4,7 +4,7 @@ import UserIcon from '../../assets/images/UserIcon.png'
 import Modal from '../../shared/ui/Modal/Modal'
 import { useEffect, useState } from 'react'
 import { useTheme } from '../../shared/lib/theme/ThemeProvider'
-import type { UserI } from '../../interfaces/user.interface'
+import type { UserT } from '../../entities/user/model/types'
 
 function Header() {
     const { theme } = useTheme()
@@ -13,7 +13,7 @@ function Header() {
     const openModal = () => setIsModalOpen(true)
     const closeModal = () => setIsModalOpen(false)
 
-    const [currentUser, setCurrentUser] = useState<UserI | null>(null)
+    const [currentUser, setCurrentUser] = useState<UserT | null>(null)
 
     useEffect(() => {
         const savedId = localStorage.getItem("currentUserId")
@@ -24,7 +24,7 @@ function Header() {
         try {
             const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
             if (!res.ok) throw new Error("Пользователь не найден")
-            const data: UserI = await res.json()
+            const data: UserT = await res.json()
             setCurrentUser(data)
             localStorage.setItem("currentUserId", id.toString())
         } catch (err) {

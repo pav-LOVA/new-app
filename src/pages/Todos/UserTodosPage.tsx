@@ -5,6 +5,8 @@ import { useTheme } from "../../shared/lib/theme/ThemeProvider";
 import loaderStyles from "../../shared/lib/hoc/withLoading.module.css";
 import styles from "./Todos.module.css";
 import { useGetUserTodosQuery } from "../../entities/todo/api/todosApi";
+import type { ItemList } from "../../shared/ui/ItemList/ItemList";
+import type { TodoT } from "../../entities/todo/model/types";
 
 function UserTodos() {
   const { theme } = useTheme();
@@ -21,6 +23,23 @@ function UserTodos() {
     skip: !userId,
   });
 
+
+  const todosList: ItemList<TodoT> = {
+    items: todos,
+    renderItem: (todo) => (
+      <li key={todo.id} className={`${styles.todoCard} ${todo.completed ? styles.completed : ""}`}>
+        <span>{todo.title}</span>
+        <span className={`${styles.status} ${todo.completed ? styles.done : styles.pending}`}>
+          {todo.completed ? "Выполнено" : "В процессе"}
+        </span>
+      </li>
+    ),
+    isLoading: isLoading || isFetching,
+    error: error ? "Ошибка загрузки данных" : null,
+    emptyMessage: "Нет задач для этого пользователя.",
+  };
+
+
   return (
     <div className="content">
       <Header />
@@ -31,26 +50,18 @@ function UserTodos() {
           <p className={styles.message}>
             Для просмотра задач нажмите кнопку «Войти» и введите ID от 1 до 10.
           </p>
-        ) : isLoading || isFetching ? (
+        ) : todosList.isLoading ? (
           <div className={loaderStyles.container}>
             <span className={loaderStyles.loader}></span>
           </div>
         ) : error ? (
-          <p className={styles.error}>Ошибка загрузки данных</p>
-        ) : todos.length > 0 ? (
+          <p className={styles.error}>{todosList.error}</p>
+        ) : todosList.items.length > 0 ? (
           <ul className={styles.todosList}>
-            {todos.map((todo) => (
-              <li key={todo.id} className={`${styles.todoCard} ${todo.completed ? styles.completed : ""}`}>
-                <span>{todo.title}</span>
-                <span
-                  className={`${styles.status} ${todo.completed ? styles.done : styles.pending}`}>
-                  {todo.completed ? "Выполнено" : "В процессе"}
-                </span>
-              </li>
-            ))}
+              {todosList.items.map((todo) => todosList.renderItem(todo))}
           </ul>
         ) : (
-          <p className={styles.message}>Нет задач для этого пользователя.</p>
+          <p className={styles.message}>{todosList.emptyMessage}</p>
         )}
       </div>
 

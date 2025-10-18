@@ -1,6 +1,6 @@
-
-import { type ModalButtonI} from '../../../interfaces/modal-button.interface'
-
+interface ModalButtonI {
+  onClick: () => void;
+}
 
 function ModalButton({ onClick }: ModalButtonI) {
   return (

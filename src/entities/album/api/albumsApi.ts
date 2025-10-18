@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { AlbumI } from "../../../interfaces/album.interface";
-import type { PhotoI } from "../../../interfaces/photo.interface";
+import type { AlbumT } from "../model/types";
+import type { PhotoT } from "../../photo/model/types";
 
 export const albumsApi = createApi({
   reducerPath: "albumsApi",
@@ -11,12 +11,12 @@ export const albumsApi = createApi({
 
   endpoints: (builder) => ({
 
-    getUserAlbums: builder.query<AlbumI[], number>({
+    getUserAlbums: builder.query<AlbumT[], number>({
       query: (userId) => `/users/${userId}/albums`,
       providesTags: (result, error, id) => [{ type: "Albums", id }],
     }),
 
-    getAlbumPhotos: builder.query<PhotoI[], number>({
+    getAlbumPhotos: builder.query<PhotoT[], number>({
       query: (albumId) => `/albums/${albumId}/photos`,
       providesTags: (result, error, id) => [{ type: "Photos", id }],
     }),

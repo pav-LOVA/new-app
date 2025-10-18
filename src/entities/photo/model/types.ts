@@ -1,4 +1,4 @@
-export interface PhotoI {
+export type PhotoT = {
   albumId: number;
   id: number;
   title: string;

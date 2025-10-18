@@ -7,6 +7,8 @@ import { useTheme } from "../../shared/lib/theme/ThemeProvider";
 import loaderStyles from "../../shared/lib/hoc/withLoading.module.css";
 import { useNavigate } from "react-router-dom";
 import { useGetUserAlbumsQuery } from "../../entities/album/api/albumsApi";
+import type { AlbumT } from "../../entities/album/model/types";
+import type { ItemList } from "../../shared/ui/ItemList/ItemList";
 
 function UserAlbums() {
   const { theme } = useTheme();
@@ -25,6 +27,20 @@ function UserAlbums() {
     [navigate]
   );
 
+
+  const albumList: ItemList<AlbumT> = {
+    items: albums,
+    renderItem: (album) => (
+      <li key={album.id} className={styles.albumCard} onClick={() => openAlbum(album.id)}>
+        <h3>{album.title}</h3>
+      </li>
+    ),
+    isLoading: isLoading || isFetching ,
+    error: error ? "Ошибка загрузки альбомов" : null,
+    emptyMessage: "Нет альбомов для этого пользователя.",
+  };
+
+
   return (
     <div className="content">
       <Header />
@@ -36,22 +52,18 @@ function UserAlbums() {
           <p className={styles.message}>
             Для просмотра альбомов нажмите кнопку «Войти» и введите ID от 1 до 10.
           </p>
-        ) : isLoading || isFetching ? (
+        ) : albumList.isLoading? (
           <div className={loaderStyles.container}>
             <span className={loaderStyles.loader}></span>
           </div>
-        ) : error ? (
-          <p className={styles.error}>Ошибка загрузки альбомов</p>
-        ) : albums.length > 0 ? (
+        ) : albumList.error ? (
+          <p className={styles.error}>{albumList.error}</p>
+        ) : albumList.items.length > 0 ? (
           <ul className={styles.albumsList}>
-            {albums.map((album) => (
-              <li key={album.id} className={styles.albumCard} onClick={() => openAlbum(album.id)}>
-                <h3>{album.title}</h3>
-              </li>
-            ))}
+            {albumList.items.map(albumList.renderItem)}
           </ul>
         ) : (
-          <p className={styles.message}>Нет альбомов для этого пользователя.</p>
+          <p className={styles.message}>{albumList.items.map(albumList.renderItem)}</p>
         )}
       </div>
 

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { PostsI } from "../../../interfaces/posts.interface";
+import type { PostsT } from "../../post/model/types";
 
 export const postsApi = createApi({
   reducerPath: "postsApi",
@@ -8,7 +8,7 @@ export const postsApi = createApi({
   }),
   tagTypes: ["Posts"],
   endpoints: (builder) => ({
-    getPosts: builder.query<PostsI[], void>({
+    getPosts: builder.query<PostsT[], void>({
       query: () => "/posts",
       providesTags: (result) =>
         result
@@ -19,7 +19,7 @@ export const postsApi = createApi({
           : [{ type: "Posts", id: "LIST" }],
     }),
 
-    getUserPosts: builder.query<PostsI[], number>({
+    getUserPosts: builder.query<PostsT[], number>({
       query: (userId) => `/users/${userId}/posts`,
       providesTags: (result, error, id) =>
         result
@@ -30,12 +30,12 @@ export const postsApi = createApi({
           : [{ type: "Posts", id: "USER" + id }],
     }),
 
-    getPostById: builder.query<PostsI, number>({
+    getPostById: builder.query<PostsT, number>({
       query: (id) => `/posts/${id}`,
       providesTags: (result, error, id) => [{ type: "Posts", id }],
     }),
 
-    addPost: builder.mutation<PostsI, Partial<PostsI>>({
+    addPost: builder.mutation<PostsT, Partial<PostsT>>({
       query: (body) => ({
         url: "/posts",
         method: "POST",
@@ -44,7 +44,7 @@ export const postsApi = createApi({
       invalidatesTags: [{ type: "Posts", id: "LIST" }],
     }),
 
-    updatePost: builder.mutation<PostsI, Partial<PostsI>>({
+    updatePost: builder.mutation<PostsT, Partial<PostsT>>({
       query: ({ id, ...patch }) => ({
         url: `/posts/${id}`,
         method: "PATCH",
