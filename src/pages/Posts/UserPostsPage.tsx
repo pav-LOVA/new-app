@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Header from "../../widgets/LayoutHeader/Header";
 import Footer from "../../widgets/LayoutFooter/Footer";
 import MainLayout from "../../shared/layouts/MainLayout";
@@ -6,41 +5,33 @@ import PostList from "../../widgets/PostList/PostList";
 import { useTheme } from "../../shared/lib/theme/ThemeProvider";
 import loaderStyles from "../../shared/lib/hoc/withLoading.module.css";
 import styles from "./Posts.module.css";
-import type { PostsI } from "../../interfaces/posts.interface";
+import { useGetUserPostsQuery } from "../../entities/post/api/postsApi";
+import type { PostsT } from "../../entities/post/model/types";
+import type { ItemList } from "../../shared/ui/ItemList/ItemList";
 
 function UserPosts() {
   const { theme } = useTheme();
-  const [posts, setPosts] = useState<PostsI[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const storedUserId = localStorage.getItem("currentUserId");
+  const userId = storedUserId ? Number(storedUserId) : null;
 
-  useEffect(() => {
-    if (!storedUserId) {
-      setIsLoading(false);
-      return;
-    }
+  const { data: posts = [], error, isLoading, isFetching } = useGetUserPostsQuery(userId!, {
+    skip: !userId,
+  });
 
-    const fetchUserPosts = async () => {
-      try {
-        setIsLoading(true);
-        const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-        if (!res.ok) throw new Error("Ошибка загрузки постов");
 
-        const data: PostsI[] = await res.json();
-        const userPosts = data.filter(
-          (post) => post.userId === Number(storedUserId)
-        );
-        setPosts(userPosts);
-      } catch (err: any) {
-        setError(err.message || "Ошибка загрузки данных");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const postList: ItemList<PostsT> = {
+    items: posts,
+    renderItem: (post) => (
+      <li key={post.id} className={styles.postCard}>
+        <h3>{post.title}</h3>
+        <p>{post.body}</p>
+      </li>
+    ),
+    isLoading: isLoading || isFetching,
+    error: error ? "Ошибка загрузки постов" : null,
+    emptyMessage: "У этого пользователя пока нет постов.",
+  };
 
-    fetchUserPosts();
-  }, [storedUserId]);
 
   return (
     <div className="content">
@@ -49,20 +40,20 @@ function UserPosts() {
 
       <div
         className={`${styles.userPostsContainer} ${theme === "light" ? styles.light : styles.dark}`}>
-        {!storedUserId ? (
+        {!userId ? (
           <p className={styles.message}>
-            Для просмотра своих постов нажмите кнопку «Войти» и введите ID от 1 до 10
+            Для просмотра своих постов нажмите кнопку «Войти» и введите ID от 1 до 10.
           </p>
-        ) : isLoading ? (
-        <div className={loaderStyles.container}><span className={loaderStyles.loader}></span></div>
-        ) : error ? (
-          <p className={styles.error}>Ошибка: {error}</p>
-        ) : posts.length > 0 ? (
-          <PostList posts={posts} />
+        ) : postList.isLoading ? (
+          <div className={loaderStyles.container}>
+            <span className={loaderStyles.loader}></span>
+          </div>
+        ) : postList.error ? (
+          <p className={styles.error}>{postList.error}</p>
+        ) : postList.items.length > 0 ? (
+          <PostList posts={postList.items} />
         ) : (
-          <p className={styles.message}>
-            У этого пользователя пока нет постов.
-          </p>
+          <p className={styles.message}>{postList.emptyMessage}</p>
         )}
       </div>
 

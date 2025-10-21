@@ -2,8 +2,9 @@ import ThemeSwitcher from '../../features/ThemeSwitcher/ui/ThemeSwitcher';
 import { useTheme } from '../lib/theme/ThemeProvider';
 import styles from './MainLayout.module.css'
 import UserTabs from '../../widgets/UserTabs/UserTabs';
+import type { PropsWithChildren } from 'react';
 
-function MainLayout() {
+const MainLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const { theme } = useTheme();
 
   return (
@@ -12,6 +13,7 @@ function MainLayout() {
         <UserTabs />
       </nav>
       <ThemeSwitcher />
+      {children}
     </aside>
   )
 }

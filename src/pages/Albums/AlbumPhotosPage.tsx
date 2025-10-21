@@ -1,55 +1,56 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./Albums.module.css";
 import Header from "../../widgets/LayoutHeader/Header";
 import Footer from "../../widgets/LayoutFooter/Footer";
 import MainLayout from "../../shared/layouts/MainLayout";
 import { useTheme } from "../../shared/lib/theme/ThemeProvider";
-import type { PhotoI } from "../../interfaces/photo.interface";
 import loaderStyles from "../../shared/lib/hoc/withLoading.module.css";
+import { useGetAlbumPhotosQuery } from "../../entities/album/api/albumsApi";
+import type { PhotoT } from "../../entities/photo/model/types";
+import type { ItemList } from "../../shared/ui/ItemList/ItemList";
 
 function AlbumPhotos() {
   const { theme } = useTheme();
   const { id } = useParams<{ id: string }>();
-  const [photos, setPhotos] = useState<PhotoI[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchPhotos = async () => {
-      try {
-        setIsLoading(true);
-        const res = await fetch(`https://jsonplaceholder.typicode.com/albums/${id}/photos`);
-        if (!res.ok) throw new Error("Ошибка загрузки фотографий");
-        const data: PhotoI[] = await res.json();
-        setPhotos(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const albumId = Number(id);
 
-    fetchPhotos();
-  }, [id]);
+  const { data: photos = [], isLoading, isFetching, error } = useGetAlbumPhotosQuery(albumId, { skip: !albumId });
 
-  if (isLoading) return <div className={loaderStyles.container}><span className={loaderStyles.loader}></span></div>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!photos) return <p>Фото не найдены</p>;
+
+   const photosList: ItemList<PhotoT> = {
+    items: photos,
+    renderItem: (photo) => (
+      <div key={photo.id} className={styles.card}>
+        <img src={photo.thumbnailUrl} alt={photo.title} />
+      </div>
+    ),
+    isLoading: isLoading || isFetching ,
+    error: error ? "Ошибка загрузки фотографий" : null,
+    emptyMessage: "Нет фотографий для этого альбома.",
+  };
+
 
   return (
     <div className="content">
       <Header />
       <MainLayout />
 
-      <div className={`${styles.photosContainer} ${theme === "light" ? styles.light : styles.dark}`}>
-        <div className={styles.grid}>
-          {photos.map((photo) => (
-            <div key={photo.id} className={styles.card}>
-              <img src={photo.url} alt={photo.title} />
-            </div>
-          ))}
-        </div>
+      <div
+        className={`${styles.photosContainer} ${theme === "light" ? styles.light : styles.dark}`}>
+        {photosList.isLoading ? (
+          <div className={loaderStyles.container}>
+            <span className={loaderStyles.loader}></span>
+          </div>
+        ) : photosList.error ? (
+          <p className={styles.error}>{photosList.error}</p>
+        ) : photosList.items.length > 0 ? (
+          <div className={styles.grid}>
+            {photosList.items.map(photosList.renderItem)}
+          </div>
+        ) : (
+          <p className={styles.message}>{photosList.emptyMessage}.</p>
+        )}
       </div>
 
       <Footer />

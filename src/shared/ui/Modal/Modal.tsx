@@ -1,8 +1,12 @@
-import React, { useEffect} from "react";
+import React, { useEffect, type ReactNode} from "react";
 import ReactDOM from "react-dom";
 import styles from "./Modal.module.css";
-import { type ModalI } from '../../../interfaces/modal.inteface';
 
+interface ModalI {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
 
 const modalRoot = document.getElementById("modal-root") as HTMLElement;
 

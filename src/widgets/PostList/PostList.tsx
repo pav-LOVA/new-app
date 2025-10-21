@@ -1,7 +1,11 @@
 import React, { useMemo } from 'react';
 import PostCard from '../../entities/post/ui/PostCard/PostCard';
-import type { PostListI } from '../../interfaces/post-list.interface';
 import styles from './PostList.module.css'
+import type { PostsT } from '../../entities/post/model/types';
+
+interface PostListI {
+  posts: PostsT[];
+}
 
 function PostList({ posts }: PostListI) {
 

@@ -1,47 +1,24 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import styles from "./Albums.module.css";
 import Header from "../../widgets/LayoutHeader/Header";
 import Footer from "../../widgets/LayoutFooter/Footer";
 import MainLayout from "../../shared/layouts/MainLayout";
 import { useTheme } from "../../shared/lib/theme/ThemeProvider";
 import loaderStyles from "../../shared/lib/hoc/withLoading.module.css";
-import type { AlbumI } from "../../interfaces/album.interface";
 import { useNavigate } from "react-router-dom";
+import { useGetUserAlbumsQuery } from "../../entities/album/api/albumsApi";
+import type { AlbumT } from "../../entities/album/model/types";
+import type { ItemList } from "../../shared/ui/ItemList/ItemList";
 
 function UserAlbums() {
   const { theme } = useTheme();
-  const [albums, setAlbums] = useState<AlbumI[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const storedUserId = localStorage.getItem("currentUserId");
   const navigate = useNavigate();
+  const storedUserId = localStorage.getItem("currentUserId");
 
-  useEffect(() => {
-    if (!storedUserId) {
-      setIsLoading(false);
-      return;
-    }
+  const userId = storedUserId ? Number(storedUserId) : null;
 
-    const fetchAlbums = async () => {
-      try {
-        setIsLoading(true);
-        const res = await fetch("https://jsonplaceholder.typicode.com/albums");
-        if (!res.ok) throw new Error("Ошибка загрузки альбомов");
-
-        const data: AlbumI[] = await res.json();
-        const userAlbums = data.filter(
-          (album) => album.userId === Number(storedUserId)
-        );
-        setAlbums(userAlbums);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAlbums();
-  }, [storedUserId]);
+  const { data: albums = [], error, isLoading, isFetching } =
+    useGetUserAlbumsQuery(userId!, { skip: !userId });
 
   const openAlbum = useCallback(
     (id: number) => {
@@ -50,6 +27,20 @@ function UserAlbums() {
     [navigate]
   );
 
+
+  const albumList: ItemList<AlbumT> = {
+    items: albums,
+    renderItem: (album) => (
+      <li key={album.id} className={styles.albumCard} onClick={() => openAlbum(album.id)}>
+        <h3>{album.title}</h3>
+      </li>
+    ),
+    isLoading: isLoading || isFetching ,
+    error: error ? "Ошибка загрузки альбомов" : null,
+    emptyMessage: "Нет альбомов для этого пользователя.",
+  };
+
+
   return (
     <div className="content">
       <Header />
@@ -57,23 +48,23 @@ function UserAlbums() {
 
       <div
         className={`${styles.albumsContainer} ${theme === "light" ? styles.light : styles.dark}`}>
-        {!storedUserId ? (
+        {!userId ? (
           <p className={styles.message}>
-            Для просмотра альбомов нажмите кнопку «Войти» и введите ID от 1 до 10
+            Для просмотра альбомов нажмите кнопку «Войти» и введите ID от 1 до 10.
           </p>
-        ) : isLoading ? (
-          <div className={loaderStyles.container}><span className={loaderStyles.loader}></span></div>
-        ) : error ? (
-          <p className={styles.error}>Ошибка: {error}</p>
-        ) : albums.length > 0 ? (
+        ) : albumList.isLoading? (
+          <div className={loaderStyles.container}>
+            <span className={loaderStyles.loader}></span>
+          </div>
+        ) : albumList.error ? (
+          <p className={styles.error}>{albumList.error}</p>
+        ) : albumList.items.length > 0 ? (
           <ul className={styles.albumsList}>
-            {albums.map((album) => (
-              <li key={album.id} className={styles.albumCard} onClick={() => openAlbum(album.id)}>
-                <h3>{album.title}</h3>
-              </li>
-            ))}
+            {albumList.items.map(albumList.renderItem)}
           </ul>
-        ) : (<p className={styles.message}>Нет альбомов для этого пользователя.</p>)}
+        ) : (
+          <p className={styles.message}>{albumList.items.map(albumList.renderItem)}</p>
+        )}
       </div>
 
       <Footer />

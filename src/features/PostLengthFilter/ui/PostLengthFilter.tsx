@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import type { PostsI } from "../../../interfaces/posts.interface";
+import React, { useState, type MouseEventHandler } from "react";
 import { sortByTitleLength } from "../lib/filterByLength";
 import styles from './PostLengthFilter.module.css';
+import type { PostsT } from "../../../entities/post/model/types";
 
 interface PostLengthFilterProps {
-  posts: PostsI[];
-  onFilter: (filteredPosts: PostsI[]) => void;
+  posts: PostsT[];
+  onFilter: (filteredPosts: PostsT[]) => void;
 }
 
 const PostLengthFilter: React.FC<PostLengthFilterProps> = ({ posts, onFilter }) => {
   const [isSorted, setIsSorted] = useState(false);
 
-  const handleSortClick = () => {
+  const handleSortClick: MouseEventHandler<HTMLButtonElement> = () => {
     if (!isSorted) {
       const sorted = sortByTitleLength(posts);
       onFilter(sorted);

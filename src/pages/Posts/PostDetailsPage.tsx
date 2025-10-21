@@ -1,48 +1,38 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { PostsI } from "../../interfaces/posts.interface";
-import type { CommentsI } from "../../interfaces/comment.interface";
-import styles from "./Posts.module.css";
-import Footer from "../../widgets/LayoutFooter/Footer";
-import { useTheme } from "../../shared/lib/theme/ThemeProvider";
-import MainLayout from "../../shared/layouts/MainLayout";
 import Header from "../../widgets/LayoutHeader/Header";
+import Footer from "../../widgets/LayoutFooter/Footer";
+import MainLayout from "../../shared/layouts/MainLayout";
+import { useTheme } from "../../shared/lib/theme/ThemeProvider";
+import styles from "./Posts.module.css";
 import loaderStyles from "../../shared/lib/hoc/withLoading.module.css";
+import { useGetPostsQuery } from "../../entities/post/api/postsApi";
+import { useGetCommentsByPostQuery } from "../../entities/comment/api/commentsApi";
 
 function PostDetail() {
   const { theme } = useTheme();
   const { id } = useParams<{ id: string }>();
-  const [post, setPost] = useState<PostsI | null>(null);
-  const [comments, setComments] = useState<CommentsI[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const postId = id ? Number(id) : null;
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        setIsLoading(true);
-        const postRes = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-        if (!postRes.ok) throw new Error("Ошибка загрузки поста");
-        const postData = await postRes.json();
+  const { data: posts, isLoading: isPostsLoading, error: postsError } = useGetPostsQuery();
+  const post = posts?.find((p) => p.id === postId);
 
-        const commentsRes = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`);
-        if (!commentsRes.ok) throw new Error("Ошибка загрузки комментариев");
-        const commentsData = await commentsRes.json();
+  const {
+    data: comments,
+    isLoading: isCommentsLoading,
+    error: commentsError,
+  } = useGetCommentsByPostQuery(postId!, { skip: !postId });
 
-        setPost(postData);
-        setComments(commentsData);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const isLoading = isPostsLoading || isCommentsLoading;
+  const error = postsError || commentsError;
 
-    fetchPost();
-  }, [id]);
+  if (isLoading)
+    return (
+      <div className={loaderStyles.container}>
+        <span className={loaderStyles.loader}></span>
+      </div>
+    );
 
-  if (isLoading) return <div className={loaderStyles.container}><span className={loaderStyles.loader}></span></div>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (error) return <p style={{ color: "red" }}>Ошибка загрузки данных</p>;
   if (!post) return <p>Пост не найден</p>;
 
   return (
@@ -50,21 +40,26 @@ function PostDetail() {
       <Header />
       <MainLayout />
 
-      <div className={`${styles.container} ${theme === "light" ? styles.light : styles.dark}`}>
+      <div
+        className={`${styles.container} ${theme === "light" ? styles.light : styles.dark}`}>
         <div className={styles.card}>
           <h2>{post.title}</h2>
           <p>{post.body}</p>
           <h3>Комментарии:</h3>
-          <ul>
-            {comments.map((c) => (
-              <li key={c.id}>
-                <b>{c.email}:</b> {c.body}
-              </li>
-            ))}
-          </ul>
+          {comments?.length ? (
+            <ul>
+              {comments.map((c) => (
+                <li key={c.id}>
+                  <b>{c.email}:</b> {c.body}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Комментариев пока нет</p>
+          )}
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );

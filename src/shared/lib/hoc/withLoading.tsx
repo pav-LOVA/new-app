@@ -1,11 +1,14 @@
-import React from "react";
-import type { WithLoadingI } from "../../../interfaces/withLoading.interface";
+import React, { type PropsWithChildren } from "react";
 import styles from './withLoading.module.css';
+
+interface WithLoadingI {
+  isLoading: boolean;
+}
 
 function withLoading<P extends object>(
   WrappedComponent: React.ComponentType<P>
 ) {
-  return function WithLoadingComponent(props: P & WithLoadingI) {
+  return function WithLoadingComponent(props: PropsWithChildren<P & WithLoadingI>) {
     const { isLoading, ...restProps } = props;
 
     if (isLoading) {

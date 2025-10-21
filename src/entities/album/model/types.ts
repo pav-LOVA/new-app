@@ -1,6 +1,5 @@
-export interface TodoI {
+export type AlbumT = {
   userId: number;
   id: number;
   title: string;
-  completed: boolean;
 }
